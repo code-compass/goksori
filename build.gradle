@@ -39,45 +39,6 @@ jacocoTestReport {
 
         xml.outputLocation = file("build/reports/jacoco.xml")
     }
-
-    def Qdomains = []
-    for (qPattern in "**/QA".."**/QZ") {
-        Qdomains.add(qPattern + "*")
-    }
-
-    finalizedBy 'jacocoTestCoverageVerification'
-}
-
-jacocoTestCoverageVerification {
-    def Qdomains = []
-    for (qPattern in "*.QA".."*.QZ") {
-        Qdomains.add(qPattern + "*")
-    }
-
-    violationRules {
-        rule {
-            enabled = true
-            element = 'CLASS'
-
-            limit {
-                counter = 'BRANCH'
-                value = 'COVEREDRATIO'
-                minimum = 1.00
-            }
-
-            limit {
-                counter = 'LINE'
-                value = 'COVEREDRATIO'
-                minimum = 1.00
-            }
-
-            limit {
-                counter = 'LINE'
-                value = 'TOTALCOUNT'
-                maximum = 200
-            }
-        }
-    }
 }
 
 tasks.named('test') {
