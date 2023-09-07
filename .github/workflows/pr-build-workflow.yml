@@ -27,7 +27,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Execute gradle test
-        run: ./gradlew test
+        run: ./gradlew --info test
 
       - name: Add coverage to pull request
         id: jacoco
