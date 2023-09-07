@@ -27,13 +27,14 @@ jobs:
         run: chmod +x gradlew
 
       - name: Execute gradle test
-        run: ./gradlew --info test
+        run: ./gradlew test
 
-      - name: Publish test results
-        uses: EnricoMi/publish-unit-test-result-action@v2
-        if: always()
+      - name: Add coverage to pull request
+        id: jacoco
+        uses: madrapps/jacoco-report@v1.6.1
         with:
-          files: |
-            test-results/**/*.xml
-            test-results/**/*.trx
-            test-results/**/*.json
+          paths: |
+            ${{ github.workspace }}/**/build/reports/jacoco.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          min-coverage-overall: 100
+          min-coverage-changed-files: 100
