@@ -29,11 +29,18 @@ jobs:
       - name: Execute gradle test
         run: ./gradlew --info test
 
-      - name: Publish test results
-        uses: EnricoMi/publish-unit-test-result-action@v2
-        if: always()
+      - name: Jacoco report to P.R
+        id: jacoco
+        uses: madrapps/jacoco-report@v1.6.1
         with:
-          files: |
-            test-results/**/*.xml
-            test-results/**/*.trx
-            test-results/**/*.json
+          paths: ${{ github.workspace }}/**/build/reports/jacoco.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          min-coverage-overall: 100
+          min-coverage-changed-files: 100
+
+      - name: Fail P.R if overall coverage is less than 100%
+        if: ${{ steps.jacoco.outputs.coverage-overall < 100.0 }}
+        uses: actions/github-script@v6
+        with:
+          script: |
+            core.setFailed('Overall coverage is less than 100%!')
