@@ -29,12 +29,11 @@ jobs:
       - name: Execute gradle test
         run: ./gradlew --info test
 
-      - name: Add coverage to pull request
+      - name: Jacoco report to P.R
         id: jacoco
         uses: madrapps/jacoco-report@v1.6.1
         with:
-          paths: |
-            ${{ github.workspace }}/**/build/reports/jacoco.xml
+          paths: ${{ github.workspace }}/**/build/reports/jacoco.xml
           token: ${{ secrets.GITHUB_TOKEN }}
           min-coverage-overall: 100
           min-coverage-changed-files: 100
