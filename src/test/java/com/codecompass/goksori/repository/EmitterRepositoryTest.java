@@ -24,7 +24,15 @@ class EmitterRepositoryTest {
     @Test
     void testFindById() {
         emitterRepository.save("id");
-
         Assertions.assertNotNull(emitterRepository.findById("id"));
+    }
+
+    @Test
+    void testDeleteById() {
+        emitterRepository.save("id");
+        Assertions.assertAll(
+                () -> Assertions.assertDoesNotThrow(() -> emitterRepository.deleteById("id")),
+                () -> Assertions.assertDoesNotThrow(() -> emitterRepository.deleteById("id"))
+        );
     }
 }

@@ -21,6 +21,8 @@ public class EmitterRepository {
             throw new GoksoriException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         final var emitter = new SseEmitter();
+        emitter.onCompletion(() -> deleteById(id));
+        emitter.onTimeout(() -> deleteById(id));
         emitters.put(id, emitter);
 
         return emitter;
@@ -28,5 +30,9 @@ public class EmitterRepository {
 
     public SseEmitter findById(@NotBlank final String id) {
         return emitters.get(id);
+    }
+
+    public void deleteById(@NotBlank final String id) {
+        emitters.remove(id);
     }
 }
