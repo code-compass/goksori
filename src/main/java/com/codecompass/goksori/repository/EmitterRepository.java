@@ -1,5 +1,6 @@
 package com.codecompass.goksori.repository;
 
+import com.codecompass.goksori.annotation.ExcludeFromJacocoGeneratedReport;
 import com.codecompass.goksori.exception.GoksoriException;
 import jakarta.validation.constraints.NotBlank;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 @Validated
 @Repository
+@ExcludeFromJacocoGeneratedReport
 public class EmitterRepository {
     private final Map<String, SseEmitter> emitters = new ConcurrentHashMap<>();
 
