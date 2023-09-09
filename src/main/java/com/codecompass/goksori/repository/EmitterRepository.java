@@ -25,8 +25,15 @@ public class EmitterRepository {
             log.error("Duplicated emitter id. {}", id);
             throw new GoksoriException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        final var emitter = new SseEmitter();
+
+        final var emitter = createEmitter(id);
         emitters.put(id, emitter);
+
+        return emitter;
+    }
+
+    private SseEmitter createEmitter(final String id) {
+        final var emitter = new SseEmitter();
         emitter.onCompletion(() -> deleteById(id));
         emitter.onTimeout(() -> deleteById(id));
 
