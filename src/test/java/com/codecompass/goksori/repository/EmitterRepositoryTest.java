@@ -44,7 +44,7 @@ class EmitterRepositoryTest {
 
         Assertions.assertEquals(
                 2,
-                CollectionUtils.size(emitterRepository.getAll())
+                CollectionUtils.size(emitterRepository.getAllEmitterMap())
         );
     }
 }

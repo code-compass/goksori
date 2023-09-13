@@ -1,9 +1,13 @@
 package com.codecompass.goksori.controller;
 
+import com.codecompass.goksori.dto.TestEventRequestDto;
 import com.codecompass.goksori.service.NotificationService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -17,8 +21,8 @@ public class NotificationController {
         return notificationService.subscribe();
     }
 
-    @GetMapping(value = "/test")
-    public void test() {
-        notificationService.test();
+    @PostMapping(value = "/event")
+    public void test(@Valid @RequestBody final TestEventRequestDto requestDto) {
+        notificationService.event(requestDto.getNotificationType());
     }
 }
