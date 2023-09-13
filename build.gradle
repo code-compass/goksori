@@ -56,6 +56,22 @@ jacoco {
 jacocoTestReport {
     dependsOn test
 
+    afterEvaluate {
+        classDirectories.setFrom(
+                files(
+                        classDirectories.files.collect {
+                            fileTree(
+                                    dir: it,
+                                    exclude: [
+                                            "com/codecompass/goksori/dto/*",
+                                            "com/codecompass/goksori/config/*"
+                                    ]
+                            )
+                        }
+                )
+        )
+    }
+
     reports {
         csv.required = false
         xml.required = true
