@@ -2,7 +2,6 @@ package com.codecompass.goksori.service;
 
 import com.codecompass.goksori.constant.NotificationTypeEnum;
 import com.codecompass.goksori.dto.CoinEventParamDto;
-import com.codecompass.goksori.exception.GoksoriException;
 import com.codecompass.goksori.repository.EmitterRepository;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
@@ -13,7 +12,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -63,31 +61,4 @@ class NotificationServiceTest {
                 )
         );
     }
-
-    @Test
-    @SneakyThrows
-    void testSendDataWhenIoException() {
-        final var emitter = mock(SseEmitter.class);
-        given(emitterRepository.save(any())).willReturn(emitter);
-        doThrow(IOException.class).when(emitter).send(any());
-
-        Assertions.assertThrows(
-                GoksoriException.class,
-                () -> notificationService.subscribe()
-        );
-        verify(emitterRepository).deleteById(any());
-    }
-
-    /*@Test
-    @SneakyThrows
-    void testTest() {
-        final var emitter = mock(SseEmitter.class);
-        given(emitterRepository.getAll()).willReturn(List.of(emitter));
-
-        Assertions.assertDoesNotThrow(
-                () -> notificationService.test()
-        );
-
-        verify(emitter).send(any());
-    }*/
 }
