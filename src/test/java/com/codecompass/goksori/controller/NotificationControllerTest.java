@@ -1,5 +1,8 @@
 package com.codecompass.goksori.controller;
 
+import com.codecompass.goksori.TestUtils;
+import com.codecompass.goksori.constant.NotificationTypeEnum;
+import com.codecompass.goksori.dto.TestEventRequestDto;
 import com.codecompass.goksori.service.NotificationService;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
@@ -13,10 +16,10 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 @WebMvcTest
 class NotificationControllerTest {
-
     @Autowired
     private MockMvc mockMvc;
 
@@ -36,8 +39,18 @@ class NotificationControllerTest {
 
     @Test
     @SneakyThrows
-    void testTest() {
-        mockMvc.perform(MockMvcRequestBuilders.get("/test"))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+    void testEvent() {
+        mockMvc.perform(
+                MockMvcRequestBuilders.post("/event")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(
+                                TestUtils.writeValueAsString(
+                                        TestEventRequestDto.builder()
+                                                .notificationType(NotificationTypeEnum.ASCEND)
+                                                .build()
+                                )
+                        )
+        ).andExpect(MockMvcResultMatchers.status().isOk());
+        verify(notificationService).event(NotificationTypeEnum.ASCEND);
     }
 }

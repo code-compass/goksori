@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -18,16 +17,16 @@ import java.util.concurrent.ConcurrentHashMap;
 @Repository
 @ExcludeFromJacocoGeneratedReport
 public class EmitterRepository {
-    private final Map<String, SseEmitter> emitters = new ConcurrentHashMap<>();
+    private final Map<String, SseEmitter> emitterMap = new ConcurrentHashMap<>();
 
     public synchronized SseEmitter save(@NotBlank final String id) {
-        if (emitters.containsKey(id)) {
+        if (emitterMap.containsKey(id)) {
             log.error("Duplicated emitter id. {}", id);
             throw new GoksoriException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         final var emitter = createEmitter(id);
-        emitters.put(id, emitter);
+        emitterMap.put(id, emitter);
 
         return emitter;
     }
@@ -41,14 +40,14 @@ public class EmitterRepository {
     }
 
     public SseEmitter findById(@NotBlank final String id) {
-        return emitters.get(id);
+        return emitterMap.get(id);
     }
 
     public void deleteById(@NotBlank final String id) {
-        emitters.remove(id);
+        emitterMap.remove(id);
     }
 
-    public List<SseEmitter> getAll() {
-        return emitters.values().stream().toList();
+    public Map<String, SseEmitter> getAllEmitterMap() {
+        return this.emitterMap;
     }
 }
